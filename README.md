@@ -18,3 +18,10 @@ Container run command: docker run <image-name>:latest
 4. CI/CD with GitHub Actions
 A GitHub Actions CI pipeline that runs hello.py on every push.
 Status Badge: [![Run Python Script](https://github.com/Karthikeya1125/DevOps-Internship/actions/workflows/ci.yml/badge.svg)](https://github.com/Karthikeya1125/DevOps-Internship/actions/workflows/ci.yml)
+
+5. Job Deployment with Nomad
+A Nomad job file that runs a docker container.
+Initialize command: nomad agent -dev
+Validate job file command: nomad job validate nomad/hello.nomad
+Run command: nomad job run nomad/hello.nomad
+Stop command: nomad job stop hello-python
