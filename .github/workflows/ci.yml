@@ -1,0 +1,21 @@
+name: Run Python Script
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-python-script:
+    runs-on: ubuntu-latest
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    -name: Set up Python
+    uses: actions/setup-python@v5
+    with: 
+      python-version: '3.11'
+
+    -name: Run Hello.python
+    run: python Scripts/Python/Hello.py
