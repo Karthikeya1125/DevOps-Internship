@@ -1,0 +1,43 @@
+// Logging configuration
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+// Docker service discovery
+discovery.docker "default" {
+  host = "unix:///var/run/docker.sock"
+  refresh_interval = "5s"
+}
+
+// Relabel rules for container metadata
+discovery.relabel "default" {
+  targets = discovery.docker.default.targets
+
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = "/(.*)"
+    target_label  = "container"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_container_log_stream"]
+    target_label  = "stream"
+  }
+}
+
+// Docker log source
+loki.source.docker "default" {
+  host             = "unix:///var/run/docker.sock"
+  targets          = discovery.docker.default.targets
+  forward_to       = [loki.write.default.receiver]
+  relabel_rules    = discovery.relabel.default.rules
+  refresh_interval = "5s"
+}
+
+// Loki write endpoint
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
